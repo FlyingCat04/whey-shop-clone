@@ -1,0 +1,149 @@
+/* --- CONTAINER TỔNG --- */
+.banner-container {
+    display: flex;
+    width: 100%;
+    max-width: 1180px;
+    margin: 5px auto;
+    height: 480px;
+    gap: 10px;
+
+}
+
+/* --- CỘT TRÁI (SLIDER + NAV) --- */
+.left-banner-container {
+    flex: 2.5;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Phần hiển thị ảnh lớn */
+.banner-image-wrapper {
+    flex: 1;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.banner-img {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    display: block;
+    transition: opacity 0.5s ease-in-out;
+}
+
+/* Thanh điều hướng bên dưới (Navigation) */
+.banner-nav {
+    display: flex;
+    height: 80px;
+    background-color: #fff;
+    border-top: 1px solid #eee;
+}
+
+.nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-bottom: 3px solid transparent;
+    padding: 0 5px;
+}
+
+/* Hover vào nav item */
+.nav-item:hover {
+    background-color: #f8f8f8;
+}
+
+/* Trạng thái ACTIVE (Đang được chọn) */
+.nav-item.active {
+    background-color: #fff;
+    border-bottom: 3px solid #d70018;
+}
+
+.nav-title {
+    font-size: 14px;
+
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    color: #333;
+}
+
+.nav-item.active .nav-title {
+    font-weight: bold;
+}
+
+.nav-desc {
+    font-size: 12px;
+    color: #666;
+}
+
+.nav-item.active .nav-desc {
+    font-weight: bold;
+}
+
+/* --- CỘT PHẢI (3 ẢNH NHỎ) --- */
+.right-banner-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 100%;
+}
+
+.right-banner-item {
+    flex: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.right-banner-item img {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+/* Hiệu ứng zoom nhẹ khi di chuột vào ảnh phải */
+.right-banner-item:hover img {
+    transform: scale(1.05);
+}
+
+/* --- RESPONSIVE (Dành cho màn hình nhỏ/điện thoại) --- */
+@media (max-width: 768px) {
+    .banner-container {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .left-banner-container {
+        width: 100%;
+        height: auto;
+    }
+
+    .banner-image-wrapper {
+        height: 200px;
+    }
+
+    .nav-title {
+        font-size: 11px;
+    }
+
+    .nav-desc {
+        display: none; /* Ẩn mô tả trên mobile cho gọn */
+    }
+
+    .right-banner-container {
+        display: none; /* Tạm ẩn banner phải trên mobile (hoặc bạn có thể để nó hiện) */
+    }
+}

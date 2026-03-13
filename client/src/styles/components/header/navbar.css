@@ -1,0 +1,221 @@
+.navbar {
+    width: 100%;
+    background-color: white;
+}
+.cart {
+  position: relative;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: red;
+  color: white;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+.navbar .container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px 20px;
+}
+
+.right-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.logo-and-categories {
+    display: flex;
+    align-items: center;
+}
+
+.logo-and-categories img {
+    cursor: pointer;
+    height: 70px;
+}
+
+
+.logo-and-categories button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 15px;
+    padding: 8px 12px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #d70018;
+    color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+
+
+.logo-and-categories button:hover {
+    background-color: #d70018;
+}
+
+.search-bar {
+
+    margin: 0 20px;
+    display: flex;
+}
+
+.search-bar input {
+    flex: 1;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-right: none;
+    border-radius: 4px 0 0 4px;
+    outline: none;
+    font-size: 13px;
+    width: 200px;
+}
+
+.search-bar button {
+    background-color: #d70018;
+    border: 1px solid #ccc;
+    border-radius: 0 4px 4px 0;
+    color: white;
+    padding: 0 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-bar button:hover {
+    background-color: #e04800;
+}
+
+.contact,
+.cart,
+.login {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    border-radius: 100px;
+}
+
+.contact svg,
+.cart svg,
+.login svg {
+    background-color: #d70018;
+    color: white;
+    border-radius: 50%;
+    padding: 6px;
+    border: 1px solid orangered;
+    flex-shrink: 0;
+}
+
+.contact:hover,
+.cart:hover,
+.login :hover {
+    color: #e04800;
+}
+
+.user-menu-wrapper {
+    position: relative;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 45px;
+    right: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    padding: 8px 0;
+    width: 160px;
+    z-index: 999;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.menu-item {
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+.menu-item:hover {
+    background: #f1f1f1;
+}
+
+.logout {
+    color: red;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+
+@media (max-width: 768px) {
+    .navbar .container {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        padding: 8px;
+    }
+
+    .logo-and-categories img {
+        height: 50px;
+    }
+
+    .logo-and-categories button {
+        padding: 6px 10px;
+        font-size: 14px;
+    }
+
+    .logo-and-categories button span {
+        display: none;
+    }
+
+    .search-bar {
+        width: 50%;
+        margin: 5px 0;
+        justify-content: center;
+    }
+
+    .search-bar input {
+        width: 100%;
+        font-size: 13px;
+    }
+
+    .contact,
+    .login {
+        display: none;
+    }
+
+    .cart span {
+        display: none;
+    }
+
+    .cart svg {
+        padding: 8px;
+    }
+
+    .cart {
+        justify-content: center;
+    }
+}
+
+
