@@ -31,6 +31,7 @@ export default function Login() {
             const loginRes = await userApi.login({username, password});
             const token = loginRes.access_token;
             localStorage.setItem("access_token", token);
+            window.dispatchEvent(new Event("auth-change"));
 
             const dashboardRes = await userApi.getProfile();
             const currentUser = dashboardRes.user;
@@ -45,6 +46,7 @@ export default function Login() {
             console.error(err)
             setError("Đăng nhập thất bại! Sai tài khoản hoặc mật khẩu hoặc token không hợp lệ.");
             localStorage.removeItem("access_token");
+            window.dispatchEvent(new Event("auth-change"));
         } finally {
             setLoading(false);
         }

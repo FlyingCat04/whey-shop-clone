@@ -22,7 +22,8 @@ axiosClient.interceptors.response.use((response) => {
     return response;
 }, (error) => {
     if (error.response && error.response.status === 401) {
-        console.log("Hết hạn token, vui lòng đăng nhập lại");
+        localStorage.removeItem('access_token');
+        window.dispatchEvent(new Event('auth-change'));
     }
     throw error;
 });

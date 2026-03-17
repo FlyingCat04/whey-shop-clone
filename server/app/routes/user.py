@@ -1,5 +1,4 @@
 from datetime import timedelta, datetime
-import json
 from flask import Blueprint, request, jsonify, current_app
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, get_jwt
@@ -62,12 +61,8 @@ def login():
         return jsonify({'error': 'Invalid username or password'}), 401
 
     access_token = create_access_token(
-        identity=json.dumps({
-            'id': user.id,
-            'username': user.username,
-            'role': user.role
-        }),
-        expires_delta=timedelta(minutes=30)
+        identity=str(user.id),
+        expires_delta=timedelta(minutes=1)
     )
 
 
@@ -76,11 +71,26 @@ def login():
 @user_bp.route('/dashboard', methods=['GET'])
 @jwt_required()
 def dashboard():
-    identity_str = get_jwt_identity()
-    current_user = json.loads(identity_str)  # convert lại dict
+    user_id = get_jwt_identity()
+    if not user_id:
+        return jsonify({'error': 'Token không hợp lệ'}), 401
+
+    try:
+        user_id = int(user_id)
+    except (TypeError, ValueError):
+        return jsonify({'error': 'Token không hợp lệ'}), 401
+
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+
     return jsonify({
         'message': 'Success Authorization',
-        'user': current_user
+        'user': {
+            'id': user.id,
+            'username': user.username,
+            'role': user.role
+        }
     }), 200
 
 @user_bp.route('/get-all-users', methods=['GET'])
@@ -101,15 +111,21 @@ def get_all_users():
 @user_bp.route('/change-password', methods=['POST'])
 @jwt_required()
 def change_password():
-    identity_str = get_jwt_identity()
-    current_user = json.loads(identity_str)
+    user_id = get_jwt_identity()
+    if not user_id:
+        return jsonify({'error': 'Token không hợp lệ'}), 401
+
+    try:
+        user_id = int(user_id)
+    except (TypeError, ValueError):
+        return jsonify({'error': 'Token không hợp lệ'}), 401
 
     try:
         data = change_password_schema.load(request.get_json())
     except ValidationError as err:
         return jsonify({'error': err.messages}), 400
 
-    user = User.query.get(current_user['id'])
+    user = User.query.get(user_id)
     if not user:
         return jsonify({'error': 'User not found'}), 404
 

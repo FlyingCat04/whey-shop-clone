@@ -15,11 +15,17 @@ order_bp = Blueprint('orders', __name__)
 @order_bp.route('/create', methods=['POST'])
 def create_order():
     user_id = None
-    try:
-        verify_jwt_in_request(optional=True)
-        user_id = get_current_user_id()
-    except:
-        user_id = None
+    auth_header = request.headers.get('Authorization', '')
+    has_bearer_token = auth_header.startswith('Bearer ')
+
+    if has_bearer_token:
+        try:
+            verify_jwt_in_request()
+            user_id = get_current_user_id()
+            if not user_id:
+                return jsonify({'error': 'Token không hợp lệ'}), 401
+        except Exception:
+            return jsonify({'error': 'Phiên đăng nhập đã hết hạn hoặc token không hợp lệ'}), 401
 
     data = request.json
     customer_info = data.get('customerInfo')
@@ -359,6 +365,7 @@ def update_order_status(order_id):
 
 
 @order_bp.route('/cancel/<string:order_code>', methods=['PUT'])
+@jwt_required()
 def cancel_order_by_user(order_code):
     try:
         order = Order.query.filter_by(order_code=order_code).first()
@@ -366,15 +373,15 @@ def cancel_order_by_user(order_code):
         if not order:
             return jsonify({'error': 'Không tìm thấy đơn hàng'}), 404
 
-        try:
-            verify_jwt_in_request(optional=True)
-            current_user_id = get_current_user_id()
-        except:
-            current_user_id = None
+        current_user_id = get_current_user_id()
+        if not current_user_id:
+            return jsonify({'error': 'Token không hợp lệ'}), 401
 
-        if current_user_id and order.user_id:
-            if str(order.user_id) != str(current_user_id):
-                return jsonify({'error': 'Bạn không có quyền hủy đơn hàng này'}), 403
+        if not order.user_id:
+            return jsonify({'error': 'Đơn hàng này không thuộc tài khoản của bạn'}), 403
+
+        if str(order.user_id) != str(current_user_id):
+            return jsonify({'error': 'Bạn không có quyền hủy đơn hàng này'}), 403
 
         if order.status != 'PENDING':
             return jsonify({

@@ -17,25 +17,31 @@ export default function NavBar() {
     const [showLogoutModal, setShowLogoutModal] = useState(false);
     const [cartCount, setCartCount] = useState(0);
 
-    useEffect(() => {
+    const syncAuthState = () => {
         const token = localStorage.getItem("access_token");
-        setLoggedIn(!!token);
-        updateCartBadge(!!token);
+        const isUserLoggedIn = !!token;
+        setLoggedIn(isUserLoggedIn);
+        updateCartBadge(isUserLoggedIn);
+    };
+
+    useEffect(() => {
+        syncAuthState();
     }, [location.pathname]);
 
 
     useEffect(() => {
             const handleCartChange = () => {
-                const token = localStorage.getItem("access_token");
-                updateCartBadge(!!token);
+                syncAuthState();
             };
 
             window.addEventListener("storage", handleCartChange);
             window.addEventListener("cart-change", handleCartChange);
+            window.addEventListener("auth-change", handleCartChange);
 
             return () => {
                 window.removeEventListener("storage", handleCartChange);
                 window.removeEventListener("cart-change", handleCartChange);
+                window.removeEventListener("auth-change", handleCartChange);
             };
         }, []);
 
@@ -51,6 +57,7 @@ export default function NavBar() {
 
     const handleConfirmLogout = () => {
         localStorage.removeItem("access_token");
+        window.dispatchEvent(new Event("auth-change"));
         setLoggedIn(false);
         setShowLogoutModal(false);
         setCartCount(0);
@@ -67,6 +74,12 @@ export default function NavBar() {
                 setCartCount(total);
             } catch (error) {
                 console.error("Lỗi lấy số lượng giỏ hàng:", error);
+                if (error.response && error.response.status === 401) {
+                    localStorage.removeItem("access_token");
+                    setLoggedIn(false);
+                    setCartCount(0);
+                    window.dispatchEvent(new Event("auth-change"));
+                }
             }
         } else {
             const cart = getCartLocal();

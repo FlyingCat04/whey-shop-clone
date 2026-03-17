@@ -33,8 +33,8 @@ const PrivateRoute = ({ children, requiredRole = null }) => {
                 console.error("Lỗi xác thực:", err);
 
                 if (err.response && err.response.status === 401) {
-                    alert("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
                     localStorage.removeItem('access_token');
+                    window.dispatchEvent(new Event('auth-change'));
                 }
                 setIsAuthorized(false);
             }
@@ -52,7 +52,7 @@ const PrivateRoute = ({ children, requiredRole = null }) => {
     }
 
     if (!isAuthorized) {
-        return <Navigate to="/" replace />;
+        return <Navigate to="/auth/login" replace />;
     }
 
     return children;
