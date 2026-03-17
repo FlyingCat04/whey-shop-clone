@@ -62,7 +62,7 @@ def login():
 
     access_token = create_access_token(
         identity=str(user.id),
-        expires_delta=timedelta(minutes=1)
+        expires_delta=timedelta(minutes=30)
     )
 
 
